@@ -1,26 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { CheckSquare, Mic, ListChecks, Video, Zap } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { CheckSquare, Mic, ListChecks, Video, Zap, LogOut } from "lucide-react";
 import UpgradeModal from "@/components/UpgradeModal";
+import { createClient } from "@/lib/supabase/client";
 
 interface NavbarProps {
   userInitials: string;
   userEmail?: string;
+  userName?: string;
   plan?: "free" | "pro";
 }
 
-export default function Navbar({ userInitials, userEmail, plan }: NavbarProps) {
+export default function Navbar({ userInitials, userEmail, userName, plan }: NavbarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
     { href: "/record", label: "New meeting", icon: Mic, dark: true },
     { href: "/actions", label: "Actions", icon: ListChecks },
     { href: "/meetings", label: "Meetings", icon: Video },
   ];
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  async function handleSignOut() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  }
 
   return (
     <nav className="bg-white border-b border-stone-200 sticky top-0 z-50">
@@ -66,13 +87,36 @@ export default function Navbar({ userInitials, userEmail, plan }: NavbarProps) {
                 Upgrade to Pro
               </button>
             )}
-            <div
-              className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"
-              title={userEmail}
-            >
-              <span className="text-xs font-semibold text-blue-700">
-                {userInitials}
-              </span>
+
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setShowDropdown((v) => !v)}
+                className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 hover:ring-2 hover:ring-blue-200 transition-all"
+                title={userEmail}
+              >
+                <span className="text-xs font-semibold text-blue-700">
+                  {userInitials}
+                </span>
+              </button>
+
+              {showDropdown && (
+                <div className="absolute right-0 top-10 w-52 bg-white border border-stone-200 rounded-xl shadow-lg py-1 z-50">
+                  <div className="px-4 py-2.5">
+                    {userName && (
+                      <p className="text-sm font-medium text-stone-900 truncate">{userName}</p>
+                    )}
+                    <p className="text-xs text-stone-400 truncate">{userEmail}</p>
+                  </div>
+                  <div className="border-t border-stone-100 my-1" />
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign out
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
