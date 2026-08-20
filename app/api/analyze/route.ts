@@ -39,7 +39,7 @@ Analyze this meeting transcript and return ONLY a valid JSON object (no markdown
   ]
 }
 Rules:
-- summary: clear, concise, past tense. Use relevant emojis at the start of each sentence to make it more readable. For example:
+- summary: clear, concise, past tense. Write each sentence on its own line separated by \n. Use relevant emojis at the start of each sentence to make it more readable. For example:
   🎯 for objectives/goals
   ✅ for decisions made
   👥 for team/people related content

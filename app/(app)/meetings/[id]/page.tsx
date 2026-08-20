@@ -230,8 +230,10 @@ export default function MeetingDetailPage() {
           {meeting.summary && (
             <div className="bg-white rounded-xl border border-stone-200 p-5">
               <h2 className="text-sm font-semibold text-stone-700 mb-3">Summary</h2>
-              <div className="bg-stone-100 rounded-lg p-4 text-sm text-stone-700 leading-relaxed">
-                {meeting.summary}
+              <div className="bg-stone-100 rounded-lg p-4 space-y-2">
+                {meeting.summary.split("\n").filter(Boolean).map((line, i) => (
+                  <p key={i} className="text-sm text-stone-700 leading-relaxed">{line}</p>
+                ))}
               </div>
             </div>
           )}
