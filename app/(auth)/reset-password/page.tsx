@@ -3,23 +3,28 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { CheckSquare, Mail, Lock, Loader2 } from "lucide-react";
+import { CheckSquare, Lock, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    setLoading(true);
 
+    if (password !== confirm) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
       setError(error.message);
@@ -41,21 +46,22 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-white rounded-xl border border-stone-200 p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-stone-900 mb-1">Welcome back</h1>
-          <p className="text-stone-500 text-sm mb-6">Sign in to your account</p>
+          <h1 className="text-2xl font-bold text-stone-900 mb-1">Set new password</h1>
+          <p className="text-stone-500 text-sm mb-6">Choose a strong password for your account.</p>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-stone-700 mb-1">
-                Email
+                New password
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Min. 8 characters"
+                  minLength={8}
                   required
                   className="w-full pl-9 pr-3 py-2.5 border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2d5a27] focus:border-transparent"
                 />
@@ -63,24 +69,17 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="block text-sm font-medium text-stone-700">
-                  Password
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-xs text-stone-400 hover:text-[#2d5a27] transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              <label className="block text-sm font-medium text-stone-700 mb-1">
+                Confirm password
+              </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
                 <input
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  placeholder="Repeat your password"
+                  minLength={8}
                   required
                   className="w-full pl-9 pr-3 py-2.5 border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2d5a27] focus:border-transparent"
                 />
@@ -99,14 +98,13 @@ export default function LoginPage() {
               className="w-full bg-[#2d5a27] text-white py-2.5 rounded-lg font-medium text-sm hover:bg-[#24481f] transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-              {loading ? "Signing in..." : "Sign in"}
+              {loading ? "Updating..." : "Update password"}
             </button>
           </form>
 
           <p className="mt-6 text-center text-sm text-stone-500">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-[#2d5a27] font-medium hover:underline">
-              Sign up
+            <Link href="/login" className="text-[#2d5a27] font-medium hover:underline">
+              Back to login
             </Link>
           </p>
         </div>

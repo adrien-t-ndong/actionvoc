@@ -32,13 +32,20 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isAuthRoute =
-    pathname.startsWith("/login") || pathname.startsWith("/signup");
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/signup") ||
+    pathname.startsWith("/forgot-password");
   const isLandingRoute =
     pathname === "/" ||
     pathname.startsWith("/pricing") ||
     pathname.startsWith("/legal") ||
     pathname.startsWith("/privacy");
-  const isPublicRoute = isAuthRoute || isLandingRoute || pathname.startsWith("/api");
+  // /reset-password is public but not isAuthRoute: logged-in recovery sessions must reach it
+  const isPublicRoute =
+    isAuthRoute ||
+    isLandingRoute ||
+    pathname.startsWith("/reset-password") ||
+    pathname.startsWith("/api");
 
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
