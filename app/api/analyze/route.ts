@@ -39,7 +39,14 @@ Analyze this meeting transcript and return ONLY a valid JSON object (no markdown
   ]
 }
 Rules:
-- summary: clear, concise, past tense
+- summary: clear, concise, past tense. Use relevant emojis at the start of each sentence to make it more readable. For example:
+  🎯 for objectives/goals
+  ✅ for decisions made
+  👥 for team/people related content
+  📅 for dates/deadlines
+  💡 for ideas
+  ⚠️ for risks or blockers
+  📊 for metrics/numbers
 - decisions: 2-5 key decisions made, as strings
 - tasks: all action items mentioned, with realistic due dates (7-14 days from today if not specified)
 - owner_name: extract from context, use "Team" if unclear
