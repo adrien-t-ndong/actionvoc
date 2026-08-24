@@ -32,7 +32,7 @@ export default function PrivacyPage() {
       <main className="pt-32 pb-24 px-6">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold text-stone-900 mb-2">Privacy Policy</h1>
-          <p className="text-stone-500 text-sm mb-10">Last updated: January 2025</p>
+          <p className="text-stone-500 text-sm mb-10">Last updated: January 2026</p>
 
           <div className="bg-white rounded-xl border border-stone-200 p-8 space-y-8 text-sm text-stone-700 leading-relaxed">
             <section>
@@ -86,10 +86,10 @@ export default function PrivacyPage() {
                 any time. To exercise these rights or to request account deletion, contact
                 us at{" "}
                 <a
-                  href="mailto:hello@actionvoc.com"
+                  href="mailto:adrient.ndong@gmail.com"
                   className="text-[#24481f] hover:underline"
                 >
-                  hello@actionvoc.com
+                  adrient.ndong@gmail.com
                 </a>
                 .
               </p>
@@ -108,10 +108,10 @@ export default function PrivacyPage() {
               <p>
                 For any privacy-related questions, contact us at{" "}
                 <a
-                  href="mailto:hello@actionvoc.com"
+                  href="mailto:adrient.ndong@gmail.com"
                   className="text-[#24481f] hover:underline"
                 >
-                  hello@actionvoc.com
+                  adrient.ndong@gmail.com
                 </a>
                 .
               </p>
@@ -122,7 +122,7 @@ export default function PrivacyPage() {
 
       <footer className="py-8 px-6 border-t border-stone-200">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-stone-500">
-          <span>© 2025 ActionVoc. All rights reserved.</span>
+          <span>© 2026 ActionVoc. All rights reserved.</span>
           <nav className="flex items-center gap-6">
             <Link href="/legal" className="hover:text-stone-900 transition-colors">
               Legal

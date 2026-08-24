@@ -240,7 +240,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-stone-200">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-stone-500">
-          <span>© 2025 ActionVoc. All rights reserved.</span>
+          <span>© 2026 ActionVoc. All rights reserved.</span>
           <nav className="flex items-center gap-6">
             <Link href="/legal" className="hover:text-stone-900 transition-colors">
               Legal
