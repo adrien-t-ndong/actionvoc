@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { CheckSquare, Mic, ListChecks, Mail, ChevronRight, Play } from "lucide-react";
+import { CheckSquare, Mic, ListChecks, Mail, ChevronRight, Play, Check, Zap, Loader2 } from "lucide-react";
 
 const features = [
   {
@@ -27,9 +28,42 @@ const features = [
   },
 ];
 
+const freeFeatures = [
+  "3 meetings included",
+  "AI transcription",
+  "Action item extraction",
+  "Email summary",
+];
+
+const proFeatures = [
+  "Unlimited meetings",
+  "AI transcription",
+  "Action item extraction",
+  "Email summary",
+  "Automated reminders",
+  "Priority support",
+];
+
 export default function LandingPage() {
-  function scrollToHowItWorks() {
-    document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  function scrollTo(id: string) {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  async function handleProCheckout() {
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/stripe/checkout", { method: "POST" });
+      if (res.status === 401) {
+        window.location.href = "/signup";
+        return;
+      }
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      setCheckoutLoading(false);
+    }
   }
 
   return (
@@ -44,12 +78,12 @@ export default function LandingPage() {
             <span className="font-bold text-stone-900">ActionVoc</span>
           </Link>
           <nav className="flex items-center gap-3">
-            <Link
-              href="/pricing"
+            <button
+              onClick={() => scrollTo("pricing")}
               className="bg-[#24481f] text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#1b3617] transition-colors"
             >
               Pricing
-            </Link>
+            </button>
             <Link
               href="/login"
               className="bg-[#24481f] text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#1b3617] transition-colors"
@@ -79,7 +113,7 @@ export default function LandingPage() {
               <ChevronRight className="w-4 h-4" />
             </Link>
             <button
-              onClick={scrollToHowItWorks}
+              onClick={() => scrollTo("how-it-works")}
               className="inline-flex items-center gap-2 bg-[#f6f1ed] text-[#24481f] px-7 py-3.5 rounded-xl font-medium text-base border border-[#24481f] hover:bg-[#ede8e3] transition-colors"
             >
               How does it work?
@@ -115,16 +149,90 @@ export default function LandingPage() {
                 key={title}
                 className="bg-[#f6f1ed] rounded-xl p-6 border border-stone-200"
               >
-                <p className="text-xs font-medium text-[#24481f] uppercase tracking-widest mb-3">
-                  {step}
-                </p>
-                <div className="w-10 h-10 bg-[#24481f] rounded-lg flex items-center justify-center mb-4">
+                <div className="w-10 h-10 bg-[#24481f] rounded-lg flex items-center justify-center mb-3">
                   <Icon className="w-5 h-5 text-white" />
                 </div>
+                <p className="text-xs font-bold text-[#24481f] uppercase tracking-widest mb-2">
+                  {step}
+                </p>
                 <h3 className="font-semibold text-stone-900 mb-2">{title}</h3>
                 <p className="text-stone-500 text-sm leading-relaxed">{description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className="py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-stone-900 text-center mb-3">
+            Simple, transparent pricing
+          </h2>
+          <p className="text-stone-500 text-center mb-12 max-w-xl mx-auto">
+            Start for free, upgrade when you&apos;re ready.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Free */}
+            <div className="bg-white rounded-xl border border-stone-200 p-8 shadow-sm">
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-stone-900 mb-1">Free</h3>
+                <p className="text-stone-500 text-sm">Get started with no commitment</p>
+              </div>
+              <div className="mb-6">
+                <span className="text-4xl font-bold text-stone-900">$0</span>
+                <span className="text-stone-500 text-sm ml-1">/month</span>
+              </div>
+              <ul className="space-y-3 mb-8">
+                {freeFeatures.map((f) => (
+                  <li key={f} className="flex items-center gap-2.5 text-sm text-stone-700">
+                    <Check className="w-4 h-4 text-[#24481f] shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/signup"
+                className="block w-full text-center border border-[#24481f] text-[#24481f] py-2.5 rounded-xl font-medium text-sm hover:bg-[#24481f]/5 transition-colors"
+              >
+                Get started
+              </Link>
+            </div>
+
+            {/* Pro */}
+            <div className="bg-white rounded-xl border-2 border-[#24481f] p-8 shadow-sm relative overflow-hidden">
+              <div className="absolute top-4 right-4 bg-[#24481f] rounded-full px-3 py-0.5 text-xs text-white font-medium">
+                Most popular
+              </div>
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <Zap className="w-4 h-4 text-[#24481f]" />
+                  <h3 className="text-xl font-bold text-stone-900">Pro</h3>
+                </div>
+                <p className="text-stone-500 text-sm">For teams that never stop moving</p>
+              </div>
+              <div className="mb-6">
+                <span className="text-4xl font-bold text-stone-900">$15</span>
+                <span className="text-stone-500 text-sm ml-1">/month</span>
+              </div>
+              <ul className="space-y-3 mb-8">
+                {proFeatures.map((f) => (
+                  <li key={f} className="flex items-center gap-2.5 text-sm text-stone-700">
+                    <Check className="w-4 h-4 text-[#24481f] shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={handleProCheckout}
+                disabled={checkoutLoading}
+                className="w-full bg-[#24481f] text-white py-2.5 rounded-xl font-medium text-sm hover:bg-[#1b3617] transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
+              >
+                {checkoutLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                {checkoutLoading ? "Redirecting..." : "Start Pro — $15/month"}
+              </button>
+            </div>
           </div>
         </div>
       </section>
