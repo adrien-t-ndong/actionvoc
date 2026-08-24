@@ -40,7 +40,7 @@ export default function Navbar({ userInitials, userEmail, userName, plan }: Navb
   async function handleSignOut() {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/login");
+    router.push("/");
   }
 
   return (
