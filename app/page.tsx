@@ -1,20 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { CheckSquare, Mic, ListChecks, Mail, ChevronRight, Play } from "lucide-react";
 
 const features = [
   {
+    step: "Step 1",
     icon: Mic,
     title: "Record & Transcribe",
     description:
       "Capture every word with AI-powered transcription. Never miss a key detail from your meetings.",
   },
   {
+    step: "Step 2",
     icon: ListChecks,
     title: "Auto-detect action items",
     description:
       "Automatically identify tasks, owners, and deadlines directly from the conversation.",
   },
   {
+    step: "Step 3",
     icon: Mail,
     title: "Send team summaries",
     description:
@@ -23,6 +28,10 @@ const features = [
 ];
 
 export default function LandingPage() {
+  function scrollToHowItWorks() {
+    document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
+  }
+
   return (
     <div className="min-h-screen bg-[#f6f1ed]">
       {/* Fixed header */}
@@ -55,19 +64,27 @@ export default function LandingPage() {
       <section className="pt-36 pb-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl sm:text-6xl font-bold text-stone-900 leading-tight mb-5">
-            Your meetings deserve<br />better follow-ups
+            Turn your meetings into<br />what gets done
           </h1>
           <p className="text-xl text-stone-500 mb-10 max-w-2xl mx-auto leading-relaxed">
             ActionVoc records, transcribes, and extracts action items from your meetings —
             then sends summaries to your team automatically.
           </p>
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 bg-[#24481f] text-white px-7 py-3.5 rounded-xl font-medium text-base hover:bg-[#1b3617] transition-colors shadow-sm"
-          >
-            Start for free
-            <ChevronRight className="w-4 h-4" />
-          </Link>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <Link
+              href="/signup"
+              className="inline-flex items-center gap-2 bg-[#24481f] text-white px-7 py-3.5 rounded-xl font-medium text-base hover:bg-[#1b3617] transition-colors shadow-sm"
+            >
+              Start for free
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+            <button
+              onClick={scrollToHowItWorks}
+              className="inline-flex items-center gap-2 bg-[#f6f1ed] text-[#24481f] px-7 py-3.5 rounded-xl font-medium text-base border border-[#24481f] hover:bg-[#ede8e3] transition-colors"
+            >
+              How does it work?
+            </button>
+          </div>
 
           {/* Video placeholder — replace inner content with <iframe src="https://www.youtube.com/embed/YOUR_ID" ... /> */}
           <div className="mt-16 relative rounded-2xl overflow-hidden bg-stone-900 aspect-video max-w-3xl mx-auto shadow-2xl">
@@ -83,7 +100,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="py-20 px-6 bg-white">
+      <section id="how-it-works" className="py-20 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-stone-900 text-center mb-3">
             Everything you need after a meeting
@@ -93,11 +110,14 @@ export default function LandingPage() {
             so your team can focus on what matters.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
-            {features.map(({ icon: Icon, title, description }) => (
+            {features.map(({ step, icon: Icon, title, description }) => (
               <div
                 key={title}
                 className="bg-[#f6f1ed] rounded-xl p-6 border border-stone-200"
               >
+                <p className="text-xs font-medium text-[#24481f] uppercase tracking-widest mb-3">
+                  {step}
+                </p>
                 <div className="w-10 h-10 bg-[#24481f] rounded-lg flex items-center justify-center mb-4">
                   <Icon className="w-5 h-5 text-white" />
                 </div>
