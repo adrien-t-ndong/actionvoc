@@ -175,7 +175,7 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Free */}
-            <div className="bg-white rounded-xl border border-stone-200 p-8 shadow-sm">
+            <div className="bg-white rounded-xl border border-stone-200 p-8 shadow-sm flex flex-col">
               <div className="mb-6">
                 <h3 className="text-xl font-bold text-stone-900 mb-1">Free</h3>
                 <p className="text-stone-500 text-sm">Get started with no commitment</p>
@@ -184,7 +184,7 @@ export default function LandingPage() {
                 <span className="text-4xl font-bold text-stone-900">$0</span>
                 <span className="text-stone-500 text-sm ml-1">/month</span>
               </div>
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-8 flex-1">
                 {freeFeatures.map((f) => (
                   <li key={f} className="flex items-center gap-2.5 text-sm text-stone-700">
                     <Check className="w-4 h-4 text-[#24481f] shrink-0" />
@@ -196,12 +196,12 @@ export default function LandingPage() {
                 href="/signup"
                 className="block w-full text-center border border-[#24481f] text-[#24481f] py-2.5 rounded-xl font-medium text-sm hover:bg-[#24481f]/5 transition-colors"
               >
-                Get started
+                Get started for free
               </Link>
             </div>
 
             {/* Pro */}
-            <div className="bg-white rounded-xl border-2 border-[#24481f] p-8 shadow-sm relative overflow-hidden">
+            <div className="bg-white rounded-xl border-2 border-[#24481f] p-8 shadow-sm relative overflow-hidden flex flex-col">
               <div className="absolute top-4 right-4 bg-[#24481f] rounded-full px-3 py-0.5 text-xs text-white font-medium">
                 Most popular
               </div>
@@ -216,7 +216,7 @@ export default function LandingPage() {
                 <span className="text-4xl font-bold text-stone-900">$15</span>
                 <span className="text-stone-500 text-sm ml-1">/month</span>
               </div>
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-8 flex-1">
                 {proFeatures.map((f) => (
                   <li key={f} className="flex items-center gap-2.5 text-sm text-stone-700">
                     <Check className="w-4 h-4 text-[#24481f] shrink-0" />
