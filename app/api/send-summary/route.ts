@@ -180,7 +180,7 @@ export async function POST(request: NextRequest) {
     const sendResults = await Promise.allSettled(
       emails.map((email: string) =>
         resend.emails.send({
-          from: "ActionVoc <onboarding@resend.dev>",
+          from: "ActionVoc <hello@actionvoc.com>",
           to: email,
           subject,
           html,
