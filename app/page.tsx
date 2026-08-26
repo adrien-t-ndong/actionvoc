@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CheckSquare, Mic, ListChecks, Mail, ChevronRight, Play, Check, Zap, Loader2 } from "lucide-react";
+import { CheckSquare, Mic, ListChecks, Mail, ChevronRight, Check, Zap, Loader2 } from "lucide-react";
 
 const features = [
   {
@@ -120,15 +120,14 @@ export default function LandingPage() {
             </button>
           </div>
 
-          {/* Video placeholder — replace inner content with <iframe src="https://www.youtube.com/embed/YOUR_ID" ... /> */}
-          <div className="mt-16 relative rounded-2xl overflow-hidden bg-stone-900 aspect-video max-w-3xl mx-auto shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#24481f]/40 to-stone-900/70" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-colors cursor-pointer">
-                <Play className="w-6 h-6 text-white ml-1" fill="white" />
-              </div>
-              <p className="text-white/60 text-sm">Watch the 2-min demo</p>
-            </div>
+          <div className="mt-16 max-w-3xl mx-auto relative w-full aspect-video rounded-xl overflow-hidden shadow-lg">
+            <iframe
+              src="https://www.youtube.com/embed/GuzVJWXN-dE"
+              title="ActionVoc Demo"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            />
           </div>
         </div>
       </section>
