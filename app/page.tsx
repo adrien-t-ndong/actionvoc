@@ -107,6 +107,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <Link
               href="/signup"
+              id="cta-hero"
               className="inline-flex items-center gap-2 bg-[#24481f] text-white px-7 py-3.5 rounded-xl font-medium text-base hover:bg-[#1b3617] transition-colors shadow-sm"
             >
               Start for free
@@ -193,6 +194,7 @@ export default function LandingPage() {
               </ul>
               <Link
                 href="/signup"
+                id="cta-free"
                 className="block w-full text-center border border-[#24481f] text-[#24481f] py-2.5 rounded-xl font-medium text-sm hover:bg-[#24481f]/5 transition-colors"
               >
                 Get started for free
@@ -224,6 +226,7 @@ export default function LandingPage() {
                 ))}
               </ul>
               <button
+                id="cta-pro"
                 onClick={handleProCheckout}
                 disabled={checkoutLoading}
                 className="w-full bg-[#24481f] text-white py-2.5 rounded-xl font-medium text-sm hover:bg-[#1b3617] transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
