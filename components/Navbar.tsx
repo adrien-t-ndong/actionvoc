@@ -81,7 +81,8 @@ export default function Navbar({ userInitials, userEmail, userName, plan }: Navb
             {plan === "free" && (
               <button
                 onClick={() => setShowUpgrade(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors"
+                id="cta-upgrade-navbar"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors"
               >
                 <Zap className="w-3.5 h-3.5" />
                 Upgrade to Pro

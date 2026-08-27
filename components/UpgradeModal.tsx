@@ -73,6 +73,7 @@ export default function UpgradeModal({ onClose }: UpgradeModalProps) {
             Maybe later
           </button>
           <button
+            id="cta-upgrade-modal"
             onClick={handleUpgrade}
             disabled={loading}
             className="flex items-center gap-2 px-4 py-2 bg-[#2d5a27] text-white text-sm rounded-lg hover:bg-[#24481f] transition-colors disabled:opacity-60"
