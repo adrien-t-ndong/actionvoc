@@ -41,10 +41,10 @@ export default function LegalPage() {
                 ActionVoc is published and operated by its founder. For any inquiries,
                 please contact us at{" "}
                 <a
-                  href="mailto:adrient.ndong@gmail.com"
+                  href="mailto:actionvoc.contact@gmail.com"
                   className="text-[#24481f] hover:underline"
                 >
-                  adrient.ndong@gmail.com
+                  actionvoc.contact@gmail.com
                 </a>
                 .
               </p>

@@ -86,10 +86,10 @@ export default function PrivacyPage() {
                 any time. To exercise these rights or to request account deletion, contact
                 us at{" "}
                 <a
-                  href="mailto:adrient.ndong@gmail.com"
+                  href="mailto:actionvoc.contact@gmail.com"
                   className="text-[#24481f] hover:underline"
                 >
-                  adrient.ndong@gmail.com
+                  actionvoc.contact@gmail.com
                 </a>
                 .
               </p>
@@ -108,10 +108,10 @@ export default function PrivacyPage() {
               <p>
                 For any privacy-related questions, contact us at{" "}
                 <a
-                  href="mailto:adrient.ndong@gmail.com"
+                  href="mailto:actionvoc.contact@gmail.com"
                   className="text-[#24481f] hover:underline"
                 >
-                  adrient.ndong@gmail.com
+                  actionvoc.contact@gmail.com
                 </a>
                 .
               </p>
