@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { CheckSquare, Mic, ListChecks, Video, Zap, LogOut } from "lucide-react";
+import { CheckSquare, Mic, ListChecks, Video, Zap, LogOut, CreditCard } from "lucide-react";
 import UpgradeModal from "@/components/UpgradeModal";
 import { createClient } from "@/lib/supabase/client";
 
@@ -36,6 +36,16 @@ export default function Navbar({ userInitials, userEmail, userName, plan }: Navb
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  async function handleManageSubscription() {
+    try {
+      const res = await fetch("/api/stripe/portal", { method: "POST" });
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      console.error("Failed to open billing portal");
+    }
+  }
 
   async function handleSignOut() {
     const supabase = createClient();
@@ -109,6 +119,15 @@ export default function Navbar({ userInitials, userEmail, userName, plan }: Navb
                     <p className="text-xs text-stone-400 truncate">{userEmail}</p>
                   </div>
                   <div className="border-t border-stone-100 my-1" />
+                  {plan === "pro" && (
+                    <button
+                      onClick={handleManageSubscription}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors"
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      Manage subscription
+                    </button>
+                  )}
                   <button
                     onClick={handleSignOut}
                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors"
