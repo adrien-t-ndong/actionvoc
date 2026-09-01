@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { CheckSquare, Mic, ListChecks, Video, Zap, LogOut, CreditCard } from "lucide-react";
+import Image from "next/image";
+import { Mic, ListChecks, Video, Zap, LogOut, CreditCard } from "lucide-react";
 import UpgradeModal from "@/components/UpgradeModal";
 import { createClient } from "@/lib/supabase/client";
 
@@ -59,9 +60,7 @@ export default function Navbar({ userInitials, userEmail, userName, plan }: Navb
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <Link href="/record" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#2d5a27] rounded-lg flex items-center justify-center flex-shrink-0">
-              <CheckSquare className="w-4 h-4 text-white" />
-            </div>
+            <Image src="/logo.png" alt="ActionVoc" width={32} height={32} />
             <span className="font-bold text-stone-900 text-sm">ActionVoc</span>
           </Link>
 

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CheckSquare, Mic, ListChecks, Mail, ChevronRight, Check, Zap, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { Mic, ListChecks, Mail, ChevronRight, Check, Zap, Loader2 } from "lucide-react";
 
 const features = [
   {
@@ -72,9 +73,7 @@ export default function LandingPage() {
       <header className="fixed top-0 inset-x-0 z-50 bg-[#f6f1ed]/90 backdrop-blur border-b border-stone-200">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#24481f] rounded-lg flex items-center justify-center">
-              <CheckSquare className="w-4 h-4 text-white" />
-            </div>
+            <Image src="/logo.png" alt="ActionVoc" width={32} height={32} />
             <span className="font-bold text-stone-900">ActionVoc</span>
           </Link>
           <nav className="flex items-center gap-3">
