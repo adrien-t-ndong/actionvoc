@@ -39,10 +39,18 @@ export default function RecordPage() {
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.search.includes("upgraded=true")) {
+      const w = window as Window & { dataLayer?: object[] };
+      w.dataLayer = w.dataLayer || [];
+      w.dataLayer.push({
+        event: "purchase_completed",
+        plan: "pro",
+        value: 15,
+        currency: "USD",
+      });
       showToast("Welcome to Pro! You now have unlimited meetings.", "success");
-      window.history.replaceState({}, "", "/record");
+      router.replace("/record");
     }
-  }, [showToast]);
+  }, [showToast, router]);
 
   async function checkPlanLimit(): Promise<boolean> {
     const supabase = createClient();
