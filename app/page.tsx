@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mic, ListChecks, Mail, ChevronRight, Check, Zap, Loader2 } from "lucide-react";
@@ -47,6 +47,19 @@ const proFeatures = [
 
 export default function LandingPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [showFloatingCta, setShowFloatingCta] = useState(false);
+  const heroCta = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const el = heroCta.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowFloatingCta(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -105,6 +118,7 @@ export default function LandingPage() {
           </p>
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <Link
+              ref={heroCta}
               href="/signup"
               id="cta-hero"
               className="inline-flex items-center gap-2 bg-[#24481f] text-white px-7 py-3.5 rounded-xl font-medium text-base hover:bg-[#1b3617] transition-colors shadow-sm"
@@ -237,6 +251,17 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Floating CTA — mobile only */}
+      <div className={`fixed bottom-0 left-0 right-0 block md:hidden transition-transform duration-300 ${showFloatingCta ? "translate-y-0" : "translate-y-full"}`}>
+        <Link
+          href="/signup"
+          id="cta-floating"
+          className="block w-full bg-[#24481f] text-white text-center font-semibold text-base py-4 shadow-[0_-2px_10px_rgba(0,0,0,0.1)]"
+        >
+          Start for free
+        </Link>
+      </div>
 
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-stone-200">
