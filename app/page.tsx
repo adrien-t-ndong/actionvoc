@@ -54,7 +54,7 @@ export default function LandingPage() {
     const el = heroCta.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setShowFloatingCta(!entry.isIntersecting),
+      ([entry]) => setShowFloatingCta(!entry.isIntersecting && entry.boundingClientRect.top < 0),
       { threshold: 0 }
     );
     observer.observe(el);
