@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
-import { CheckSquare, Mail, Lock, Loader2 } from "lucide-react";
+import { Mail, Lock, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -34,9 +35,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#f6f1ed] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="w-9 h-9 bg-[#2d5a27] rounded-lg flex items-center justify-center">
-            <CheckSquare className="w-5 h-5 text-white" />
-          </div>
+          <Image src="/logo.png" alt="ActionVoc" width={32} height={32} />
           <span className="text-xl font-bold text-stone-900">ActionVoc</span>
         </div>
 
