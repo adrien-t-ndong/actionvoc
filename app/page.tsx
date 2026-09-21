@@ -177,10 +177,9 @@ export default function LandingPage() {
       </section>
 
       {/* Why ActionVoc */}
-      <section className="px-6 py-16">
-        <div className="max-w-4xl mx-auto bg-[#24481f] rounded-2xl px-10 py-12">
+      <section className="bg-[#24481f] py-16 px-6">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
-            <p className="text-xs font-medium text-[#b8d4b2] uppercase tracking-widest mb-3">Why ActionVoc</p>
             <h2 className="text-3xl font-medium text-[#f6f1ed] leading-tight">So why choosing ActionVoc<br/>instead of another tool?</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -217,7 +216,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-20 px-6">
+      <section id="pricing" className="bg-[#f6f1ed] py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-stone-900 text-center mb-3">
             Simple, transparent pricing
