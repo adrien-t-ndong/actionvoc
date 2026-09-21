@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Mic, ListChecks, Mail, ChevronRight, Check, Zap, Loader2 } from "lucide-react";
+import { Mic, ListChecks, Mail, ChevronRight, Check, Zap, Loader2, Sparkles, LayoutDashboard, BellRing } from "lucide-react";
 
 const features = [
   {
@@ -172,6 +172,46 @@ export default function LandingPage() {
                 <p className="text-stone-500 text-sm leading-relaxed">{description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why ActionVoc */}
+      <section className="px-6 py-16">
+        <div className="max-w-4xl mx-auto bg-[#24481f] rounded-2xl px-10 py-12">
+          <div className="text-center mb-10">
+            <p className="text-xs font-medium text-[#b8d4b2] uppercase tracking-widest mb-3">Why ActionVoc</p>
+            <h2 className="text-3xl font-medium text-[#f6f1ed] leading-tight">So why choosing ActionVoc<br/>instead of another tool?</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="bg-white/[0.08] border border-white/[0.15] rounded-xl p-5">
+              <div className="w-9 h-9 bg-white/[0.12] rounded-lg flex items-center justify-center mb-4">
+                <Sparkles className="w-5 h-5 text-[#eaf3de]" />
+              </div>
+              <h3 className="text-sm font-medium text-[#f6f1ed] mb-2">More than just an AI meeting assistant</h3>
+              <p className="text-sm text-[#b8d4b2] leading-relaxed"><span className="text-[#f5e642]">Most tools stop at the summary.</span> ActionVoc goes further — it tracks tasks over time and automatically follows up with your team when nothing moves.</p>
+            </div>
+            <div className="bg-white/[0.08] border border-white/[0.15] rounded-xl p-5">
+              <div className="w-9 h-9 bg-white/[0.12] rounded-lg flex items-center justify-center mb-4">
+                <LayoutDashboard className="w-5 h-5 text-[#eaf3de]" />
+              </div>
+              <h3 className="text-sm font-medium text-[#f6f1ed] mb-2">Everything centralized in one place</h3>
+              <p className="text-sm text-[#b8d4b2] leading-relaxed">Summaries, decisions, assigned tasks, meeting history — <span className="text-[#7dd95a]">all in one place</span>, accessible in 2 clicks. No more digging through emails or notes.</p>
+            </div>
+            <div className="bg-white/[0.08] border border-white/[0.15] rounded-xl p-5">
+              <div className="w-9 h-9 bg-white/[0.12] rounded-lg flex items-center justify-center mb-4">
+                <Mic className="w-5 h-5 text-[#eaf3de]" />
+              </div>
+              <h3 className="text-sm font-medium text-[#f6f1ed] mb-2">Works in person and online</h3>
+              <p className="text-sm text-[#b8d4b2] leading-relaxed"><span className="text-[#f5e642]">No intrusive bot</span> joining your calls. ActionVoc records via your microphone, whether you&apos;re in a meeting room or on Zoom.</p>
+            </div>
+            <div className="bg-white/[0.08] border border-white/[0.15] rounded-xl p-5">
+              <div className="w-9 h-9 bg-white/[0.12] rounded-lg flex items-center justify-center mb-4">
+                <BellRing className="w-5 h-5 text-[#eaf3de]" />
+              </div>
+              <h3 className="text-sm font-medium text-[#f6f1ed] mb-2">Your team stays accountable</h3>
+              <p className="text-sm text-[#b8d4b2] leading-relaxed">The Actions tab sends automatic reminders to people who are late on their tasks. <span className="text-[#7dd95a]">No more manual follow-ups</span> from you.</p>
+            </div>
           </div>
         </div>
       </section>
