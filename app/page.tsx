@@ -230,7 +230,7 @@ export default function LandingPage() {
             <div className="bg-white rounded-xl border border-stone-200 p-8 shadow-sm flex flex-col">
               <div className="mb-6">
                 <h3 className="text-xl font-bold text-stone-900 mb-1">Free</h3>
-                <p className="text-stone-500 text-sm">Get started with no commitment</p>
+                <p className="text-stone-500 text-sm">Get started. No commitment. No credit card.</p>
               </div>
               <div className="mb-6">
                 <span className="text-4xl font-bold text-stone-900">$0</span>
