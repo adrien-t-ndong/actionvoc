@@ -19,7 +19,7 @@ export default function SignupPage() {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: "https://actionvoc.com/record" },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
   }
 
