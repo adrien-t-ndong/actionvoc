@@ -41,10 +41,12 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/legal") ||
     pathname.startsWith("/privacy");
   // /reset-password is public but not isAuthRoute: logged-in recovery sessions must reach it
+  // /auth/* must be public: the OAuth callback exchanges the code before the session exists
   const isPublicRoute =
     isAuthRoute ||
     isLandingRoute ||
     pathname.startsWith("/reset-password") ||
+    pathname.startsWith("/auth/") ||
     pathname.startsWith("/api");
 
   if (!user && !isPublicRoute) {
