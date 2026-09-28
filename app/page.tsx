@@ -136,7 +136,7 @@ export default function LandingPage() {
 
           <div className="mt-16 max-w-3xl mx-auto relative w-full aspect-video rounded-xl overflow-hidden shadow-lg">
             <iframe
-              src="https://www.youtube.com/embed/PmlKqxEos5Y"
+              src="https://www.youtube.com/embed/_yL47io_HPE"
               title="ActionVoc Demo"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
