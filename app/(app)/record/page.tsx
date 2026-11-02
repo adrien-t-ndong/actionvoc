@@ -8,6 +8,7 @@ import UpgradeModal from "@/components/UpgradeModal";
 import Toast from "@/components/Toast";
 import { createClient } from "@/lib/supabase/client";
 
+type RecordingMode = "inperson" | "online";
 type AnalysisStep = "transcribing" | "speakers" | "summary" | "actions";
 const ANALYSIS_STEPS: { key: AnalysisStep; label: string }[] = [
   { key: "transcribing", label: "Transcribing audio..." },
@@ -27,14 +28,33 @@ export default function RecordPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [recordingMode, setRecordingModeState] = useState<RecordingMode>("inperson");
+  const [onlineModeAvailable, setOnlineModeAvailable] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
+  const tabStreamRef = useRef<MediaStream | null>(null);
+  const micStreamRef = useRef<MediaStream | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const recordingModeRef = useRef<RecordingMode>("inperson");
+
+  function setRecordingMode(mode: RecordingMode) {
+    setRecordingModeState(mode);
+    recordingModeRef.current = mode;
+  }
 
   const showToast = useCallback((message: string, type: "success" | "error") => {
     setToast({ message, type });
+  }, []);
+
+  useEffect(() => {
+    const ua = navigator.userAgent;
+    const isChromium = /Chrome\//.test(ua);
+    const isDesktop = !/Mobi|Android/.test(ua);
+    const hasGetDisplayMedia = typeof navigator.mediaDevices?.getDisplayMedia === "function";
+    setOnlineModeAvailable(hasGetDisplayMedia && isChromium && isDesktop);
   }, []);
 
   useEffect(() => {
@@ -70,52 +90,132 @@ export default function RecordPage() {
     return true;
   }
 
-  async function startRecording() {
-    const allowed = await checkPlanLimit();
-    if (!allowed) return;
+  function cleanupOnlineStreams() {
+    tabStreamRef.current?.getTracks().forEach((t) => t.stop());
+    micStreamRef.current?.getTracks().forEach((t) => t.stop());
+    audioContextRef.current?.close();
+    tabStreamRef.current = null;
+    micStreamRef.current = null;
+    audioContextRef.current = null;
+  }
 
+  function launchMediaRecorder(stream: MediaStream) {
+    const mediaRecorder = new MediaRecorder(stream);
+    mediaRecorderRef.current = mediaRecorder;
+    chunksRef.current = [];
+
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) chunksRef.current.push(e.data);
+    };
+
+    mediaRecorder.start(100);
+    setRecording(true);
+    startTimeRef.current = Date.now();
+
+    timerRef.current = setInterval(() => {
+      setTimer(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 1000);
+  }
+
+  async function startInPersonRecording() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      chunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
-      };
-
-      mediaRecorder.start(100);
-      setRecording(true);
-      startTimeRef.current = Date.now();
-
-      timerRef.current = setInterval(() => {
-        setTimer(Math.floor((Date.now() - startTimeRef.current) / 1000));
-      }, 1000);
+      launchMediaRecorder(stream);
     } catch {
       showToast("Microphone access denied. Please allow microphone permissions.", "error");
     }
   }
 
-  async function stopAndAnalyze() {
-    if (!mediaRecorderRef.current) return;
+  async function startOnlineRecording() {
+    let tabStream: MediaStream;
+    try {
+      tabStream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true,
+        // @ts-expect-error: Chrome-specific constraints
+        preferCurrentTab: false,
+        selfBrowserSurface: "exclude",
+        systemAudio: "include",
+      });
+    } catch {
+      return;
+    }
 
-    mediaRecorderRef.current.stop();
-    mediaRecorderRef.current.stream.getTracks().forEach((t) => t.stop());
+    tabStream.getVideoTracks().forEach((t) => t.stop());
+
+    const tabAudioTracks = tabStream.getAudioTracks();
+    if (tabAudioTracks.length === 0) {
+      tabStream.getTracks().forEach((t) => t.stop());
+      showToast(
+        "No audio detected. Select the meeting tab and check 'Share tab audio'.",
+        "error"
+      );
+      return;
+    }
+
+    let micStream: MediaStream;
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true },
+      });
+    } catch {
+      tabStream.getTracks().forEach((t) => t.stop());
+      showToast("Microphone access denied. Please allow microphone permissions.", "error");
+      return;
+    }
+
+    const audioContext = new AudioContext();
+    const destination = audioContext.createMediaStreamDestination();
+    audioContext.createMediaStreamSource(tabStream).connect(destination);
+    audioContext.createMediaStreamSource(micStream).connect(destination);
+
+    tabStreamRef.current = tabStream;
+    micStreamRef.current = micStream;
+    audioContextRef.current = audioContext;
+
+    tabAudioTracks[0].addEventListener("ended", () => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+        stopAndAnalyze();
+      }
+    });
+
+    launchMediaRecorder(destination.stream);
+  }
+
+  async function startRecording() {
+    const allowed = await checkPlanLimit();
+    if (!allowed) return;
+
+    if (recordingModeRef.current === "online") {
+      await startOnlineRecording();
+    } else {
+      await startInPersonRecording();
+    }
+  }
+
+  async function stopAndAnalyze() {
+    const mr = mediaRecorderRef.current;
+    if (!mr || mr.state === "inactive") return;
+
+    mr.stop();
+
+    if (recordingModeRef.current === "online") {
+      cleanupOnlineStreams();
+    } else {
+      mr.stream.getTracks().forEach((t) => t.stop());
+    }
 
     if (timerRef.current) clearInterval(timerRef.current);
     setRecording(false);
 
     await new Promise<void>((resolve) => {
-      if (mediaRecorderRef.current) {
-        mediaRecorderRef.current.onstop = () => resolve();
-      } else {
-        resolve();
-      }
+      mr.onstop = () => resolve();
     });
 
+    const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
     const blob = new Blob(chunksRef.current, { type: "audio/webm" });
     const file = new File([blob], "recording.webm", { type: "audio/webm" });
-    await analyzeFile(file, timer);
+    await analyzeFile(file, elapsed);
   }
 
   async function analyzeFile(file: File, duration?: number) {
@@ -252,6 +352,48 @@ export default function RecordPage() {
 
       <div className="bg-white rounded-xl border border-stone-200 p-6">
         <h2 className="text-sm font-medium text-stone-700 mb-4">Start recording</h2>
+
+        {!recording && (
+          <div className="flex rounded-lg border border-stone-300 overflow-hidden mb-4">
+            <button
+              id="mode-inperson"
+              onClick={() => setRecordingMode("inperson")}
+              className={`flex-1 py-2 text-sm font-medium transition-colors ${
+                recordingMode === "inperson"
+                  ? "bg-[#24481f] text-white"
+                  : "bg-white text-stone-600 hover:bg-stone-50"
+              }`}
+            >
+              In-person
+            </button>
+            <button
+              id="mode-online"
+              onClick={() => onlineModeAvailable && setRecordingMode("online")}
+              disabled={!onlineModeAvailable}
+              className={`flex-1 py-2 text-sm font-medium transition-colors leading-tight ${
+                recordingMode === "online"
+                  ? "bg-[#24481f] text-white"
+                  : onlineModeAvailable
+                  ? "bg-white text-stone-600 hover:bg-stone-50"
+                  : "bg-white text-stone-400 cursor-not-allowed"
+              }`}
+            >
+              Online meeting (browser tab)
+              {!onlineModeAvailable && (
+                <span className="block text-xs font-normal mt-0.5">
+                  Available on Chrome and Edge desktop
+                </span>
+              )}
+            </button>
+          </div>
+        )}
+
+        {recordingMode === "online" && !recording && (
+          <div className="text-xs text-stone-600 bg-stone-50 border border-stone-200 rounded-lg p-3 mb-4">
+            Chrome will ask you to choose a tab. Pick your meeting tab and make sure{" "}
+            <strong>&apos;Share tab audio&apos;</strong> is checked.
+          </div>
+        )}
 
         {recording ? (
           <div className="space-y-4">
