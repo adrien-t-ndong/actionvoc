@@ -2,10 +2,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { Mic, ListChecks, Video, Zap, LogOut, CreditCard } from "lucide-react";
+import { Mic, ListChecks, Video, Zap, LogOut, CreditCard, Gift } from "lucide-react";
 import UpgradeModal from "@/components/UpgradeModal";
+import RedeemCodeModal from "@/components/RedeemCodeModal";
+import Toast from "@/components/Toast";
 import { createClient } from "@/lib/supabase/client";
 
 interface NavbarProps {
@@ -17,9 +19,10 @@ interface NavbarProps {
 
 export default function Navbar({ userInitials, userEmail, userName, plan }: NavbarProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showRedeem, setShowRedeem] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
@@ -51,12 +54,24 @@ export default function Navbar({ userInitials, userEmail, userName, plan }: Navb
   async function handleSignOut() {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/");
+    window.location.href = "/";
   }
 
   return (
     <nav className="bg-white border-b border-stone-200 sticky top-0 z-50">
-      {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} />}
+      {showUpgrade && (
+        <UpgradeModal
+          onClose={() => setShowUpgrade(false)}
+          onRedeemCode={() => { setShowUpgrade(false); setShowRedeem(true); }}
+        />
+      )}
+      {showRedeem && (
+        <RedeemCodeModal
+          onClose={() => setShowRedeem(false)}
+          onSuccess={(msg) => { setShowRedeem(false); setToast(msg); }}
+        />
+      )}
+      {toast && <Toast message={toast} type="success" onClose={() => setToast(null)} />}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <Link href="/record" className="flex items-center gap-2">
@@ -125,6 +140,15 @@ export default function Navbar({ userInitials, userEmail, userName, plan }: Navb
                     >
                       <CreditCard className="w-4 h-4" />
                       Manage subscription
+                    </button>
+                  )}
+                  {plan === "free" && (
+                    <button
+                      onClick={() => { setShowDropdown(false); setShowRedeem(true); }}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors"
+                    >
+                      <Gift className="w-4 h-4" />
+                      Redeem a code
                     </button>
                   )}
                   <button

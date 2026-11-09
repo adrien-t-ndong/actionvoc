@@ -114,11 +114,12 @@ export async function POST(request: NextRequest) {
     // Check plan limit
     const { data: profile } = await supabaseAdmin
       .from("profiles")
-      .select("plan, meetings_count")
+      .select("plan, meetings_count, bonus_meetings")
       .eq("id", userId)
       .single();
 
-    if (profile?.plan === "free" && (profile?.meetings_count || 0) >= 3) {
+    const freeLimit = 3 + (profile?.bonus_meetings ?? 0);
+    if (profile?.plan === "free" && (profile?.meetings_count || 0) >= freeLimit) {
       return NextResponse.json({ error: "upgrade_required" }, { status: 403 });
     }
 

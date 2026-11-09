@@ -5,6 +5,7 @@ import { X, Zap, Loader2 } from "lucide-react";
 
 interface UpgradeModalProps {
   onClose: () => void;
+  onRedeemCode?: () => void;
 }
 
 const FEATURES = [
@@ -14,7 +15,7 @@ const FEATURES = [
   "Priority support",
 ];
 
-export default function UpgradeModal({ onClose }: UpgradeModalProps) {
+export default function UpgradeModal({ onClose, onRedeemCode }: UpgradeModalProps) {
   const [loading, setLoading] = useState(false);
 
   async function handleUpgrade() {
@@ -65,7 +66,18 @@ export default function UpgradeModal({ onClose }: UpgradeModalProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 p-5 border-t border-stone-100">
+        <div className="flex items-center justify-between p-5 border-t border-stone-100">
+          <div>
+            {onRedeemCode && (
+              <button
+                onClick={onRedeemCode}
+                className="text-xs text-stone-400 hover:text-stone-600 underline underline-offset-2"
+              >
+                Have a promo code?
+              </button>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
           <button
             onClick={onClose}
             className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900"
@@ -81,6 +93,7 @@ export default function UpgradeModal({ onClose }: UpgradeModalProps) {
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             {loading ? "Redirecting..." : "Upgrade — $15/month"}
           </button>
+          </div>
         </div>
       </div>
     </div>
