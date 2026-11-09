@@ -123,7 +123,7 @@ export default function LandingPage() {
             </li>
             <li className="flex items-start gap-3">
               <Check className="w-5 h-5 mt-1 shrink-0 text-[#24481f]" />
-              <span>No <strong className="font-semibold text-stone-900">annoying bot</strong> for online meetings</span>
+              <span>No <strong className="font-semibold text-stone-900">intrusive bot</strong> for online meetings</span>
             </li>
           </ul>
           <div className="flex items-center justify-center gap-3 flex-wrap">
