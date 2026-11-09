@@ -1,22 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, Lock, User, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-export default function SignupPage() {
-  const router = useRouter();
+function PromoCodeCapture() {
   const searchParams = useSearchParams();
-
   useEffect(() => {
     const code = searchParams.get("code");
     if (code) {
       localStorage.setItem("pendingPromoCode", code.toUpperCase());
     }
   }, [searchParams]);
+  return null;
+}
+
+export default function SignupPage() {
+  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,6 +59,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-[#f6f1ed] flex items-center justify-center p-4">
+      <Suspense fallback={null}><PromoCodeCapture /></Suspense>
       <div className="w-full max-w-md">
         <div className="flex items-center justify-center gap-2 mb-8">
           <Image src="/logo.png" alt="ActionVoc" width={32} height={32} />
