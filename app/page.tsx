@@ -112,10 +112,20 @@ export default function LandingPage() {
           <h1 className="text-5xl sm:text-6xl font-bold text-stone-900 leading-tight mb-5">
             Turn your meetings into<br />what gets done
           </h1>
-          <p className="text-xl text-stone-500 mb-10 max-w-2xl mx-auto leading-relaxed">
-            ActionVoc records, transcribes, and extracts action items from your meetings —
-            then sends summaries to your team automatically.
-          </p>
+          <ul className="text-xl text-stone-500 mb-10 max-w-xl mx-auto leading-relaxed text-left space-y-2">
+            <li className="flex items-start gap-3">
+              <Check className="w-5 h-5 mt-1 shrink-0 text-[#24481f]" />
+              <span>ActionVoc records, transcribes, and extracts action items from your meetings</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <Check className="w-5 h-5 mt-1 shrink-0 text-[#24481f]" />
+              <span>Automatically sends summaries to your team or clients</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <Check className="w-5 h-5 mt-1 shrink-0 text-[#24481f]" />
+              <span>No <strong className="font-semibold text-stone-900">annoying bot</strong> for online meetings</span>
+            </li>
+          </ul>
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <Link
               ref={heroCta}
